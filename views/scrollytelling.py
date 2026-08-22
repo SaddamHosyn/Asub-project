@@ -3,6 +3,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 from utils.plotly_theme import get_plotly_preset
 
+def _set_chapter(chap_num):
+    st.session_state["story_chapter"] = chap_num
+
 def render_scrollytelling_tab(df_macro, df_muni, df_sectors):
     """Renders the 'Åland in Figures' Narrative Scrollytelling Interface."""
     
@@ -29,30 +32,42 @@ def render_scrollytelling_tab(df_macro, df_muni, df_sectors):
         st.session_state["story_chapter"] = 1
         
     chap_col1, chap_col2, chap_col3, chap_col4 = st.columns(4)
+    curr_chapter = st.session_state["story_chapter"]
     
     with chap_col1:
-        if st.button("1️⃣ Chapter 1: Population", type="primary" if st.session_state["story_chapter"] == 1 else "secondary"):
-            st.session_state["story_chapter"] = 1
-            st.rerun()
+        st.button(
+            "1️⃣ Chapter 1: Population", 
+            type="primary" if curr_chapter == 1 else "secondary",
+            on_click=_set_chapter,
+            args=(1,)
+        )
             
     with chap_col2:
-        if st.button("2️⃣ Chapter 2: Economy & GDP", type="primary" if st.session_state["story_chapter"] == 2 else "secondary"):
-            st.session_state["story_chapter"] = 2
-            st.rerun()
+        st.button(
+            "2️⃣ Chapter 2: Economy & GDP", 
+            type="primary" if curr_chapter == 2 else "secondary",
+            on_click=_set_chapter,
+            args=(2,)
+        )
             
     with chap_col3:
-        if st.button("3️⃣ Chapter 3: Green Transition", type="primary" if st.session_state["story_chapter"] == 3 else "story_chapter" == 3):
-            st.session_state["story_chapter"] = 3
-            st.rerun()
+        st.button(
+            "3️⃣ Chapter 3: Green Transition", 
+            type="primary" if curr_chapter == 3 else "secondary",
+            on_click=_set_chapter,
+            args=(3,)
+        )
             
     with chap_col4:
-        if st.button("4️⃣ Chapter 4: Maritime & Ferry", type="primary" if st.session_state["story_chapter"] == 4 else "secondary"):
-            st.session_state["story_chapter"] = 4
-            st.rerun()
+        st.button(
+            "4️⃣ Chapter 4: Maritime & Ferry", 
+            type="primary" if curr_chapter == 4 else "secondary",
+            on_click=_set_chapter,
+            args=(4,)
+        )
             
     st.divider()
     
-    curr_chapter = st.session_state["story_chapter"]
     col_text, col_visual = st.columns([1, 1])
     
     if curr_chapter == 1:
@@ -171,12 +186,8 @@ def render_scrollytelling_tab(df_macro, df_muni, df_sectors):
     
     with c_prev:
         if curr_chapter > 1:
-            if st.button("⬅️ Previous Chapter"):
-                st.session_state["story_chapter"] -= 1
-                st.rerun()
+            st.button("⬅️ Previous Chapter", on_click=_set_chapter, args=(curr_chapter - 1,))
                 
     with c_next:
         if curr_chapter < 4:
-            if st.button("Next Chapter ➡️"):
-                st.session_state["story_chapter"] += 1
-                st.rerun()
+            st.button("Next Chapter ➡️", on_click=_set_chapter, args=(curr_chapter + 1,))

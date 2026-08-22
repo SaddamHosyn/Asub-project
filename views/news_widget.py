@@ -2,6 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import plotly.express as px
 import plotly.graph_objects as go
+import urllib.parse
 from utils.plotly_theme import get_plotly_preset
 
 def render_news_widget_tab(df_macro, df_muni, df_sectors, df_tourism_monthly):

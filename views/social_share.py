@@ -78,5 +78,12 @@ def render_social_share_preview(df):
             components.html(js_copy, height=0, width=0)
             
             st.toast("🔗 Dynamic share link copied to clipboard!", icon="📋")
-            st.success(f"**Share Link Ready:** [{dynamic_share_url}]({dynamic_share_url})")
+            st.markdown(f"""
+            <div style="background-color: #dcfce7; border: 1.5px solid #16a34a; padding: 12px 18px; border-radius: 10px; font-size: 0.95rem; margin-top: 12px; margin-bottom: 12px;">
+                <span style="color: #064e3b; font-weight: 800;">✅ Share Link Ready:</span> 
+                <a href="{dynamic_share_url}" target="_blank" style="color: #004077 !important; font-weight: 800; text-decoration: underline !important; word-break: break-all; margin-left: 6px;">
+                    {dynamic_share_url}
+                </a>
+            </div>
+            """, unsafe_allow_html=True)
             st.code(dynamic_share_url, language="text")

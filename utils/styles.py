@@ -252,6 +252,18 @@ def apply_custom_styles():
             color: #064e3b !important;
         }
 
+        /* Distinct Hyperlink Styling for Alerts */
+        div[data-testid="stAlert"] a,
+        div[data-baseweb="notification"] a {
+            color: #004077 !important;
+            text-decoration: underline !important;
+            font-weight: 800 !important;
+        }
+        div[data-testid="stAlert"] a:hover,
+        div[data-baseweb="notification"] a:hover {
+            color: #0284c7 !important;
+        }
+
         /* Error Box (st.error) */
         div[data-testid="stAlert"][kind="error"],
         div[data-baseweb="notification"][kind="error"] {

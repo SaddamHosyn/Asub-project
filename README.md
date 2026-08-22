@@ -1,11 +1,18 @@
 # 🏛️ Åland Official Statistics Portal (ÅSUB)
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://asub-project-showcase.streamlit.app/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/streamlit-v1.30+-ff4b4b.svg)](https://streamlit.io/)
 [![Plotly](https://img.shields.io/badge/plotly-v5.18+-3f4f75.svg)](https://plotly.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An interactive, high-contrast, multi-domain statistical portal for **Åland (Ålands statistik- och utredningsbyrå)**. Designed for statisticians, policy analysts, and decision-makers requiring accurate demographic, macroeconomic, labor market, and tourism intelligence.
+
+---
+
+## 🌐 Live Interactive Portal
+
+Experience the live deployed application on Streamlit Community Cloud:  
+👉 **[https://asub-project-showcase.streamlit.app/](https://asub-project-showcase.streamlit.app/)**
 
 ---
 

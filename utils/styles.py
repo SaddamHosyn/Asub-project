@@ -288,11 +288,15 @@ def apply_custom_styles():
             opacity: 1 !important;
         }
 
-        /* Download CSV/JSON Buttons & Action Button Polish (Photo 2 Fix) */
+        /* Download CSV/JSON Buttons & Action Button Polish (White Lettering Fix) */
         div.stDownloadButton > button,
+        div[data-testid="stDownloadButton"] > button,
         div.stButton > button,
+        div[data-testid="stButton"] > button,
         button[kind="primary"],
-        button[kind="secondary"] {
+        button[kind="secondary"],
+        button[data-testid="baseButton-secondary"],
+        button[data-testid="baseButton-primary"] {
             background: #004077 !important;
             background-color: #004077 !important;
             color: #ffffff !important;
@@ -304,20 +308,50 @@ def apply_custom_styles():
             box-shadow: 0 4px 12px rgba(0, 64, 119, 0.2) !important;
         }
 
+        div.stDownloadButton > button *,
+        div[data-testid="stDownloadButton"] > button *,
+        div.stButton > button *,
+        div[data-testid="stButton"] > button *,
+        button[kind="primary"] *,
+        button[kind="secondary"] *,
+        button[data-testid="baseButton-secondary"] *,
+        button[data-testid="baseButton-primary"] *,
+        div.stButton > button p,
+        div[data-testid="stButton"] > button p,
+        div.stButton > button span,
+        div[data-testid="stButton"] > button span,
+        div.stButton > button div,
+        div[data-testid="stButton"] > button div,
+        div.stButton [data-testid="stMarkdownContainer"] p {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+        }
+
         div.stDownloadButton > button:hover,
+        div[data-testid="stDownloadButton"] > button:hover,
         div.stButton > button:hover,
+        div[data-testid="stButton"] > button:hover,
         button[kind="primary"]:hover,
-        button[kind="secondary"]:hover {
+        button[kind="secondary"]:hover,
+        button[data-testid="baseButton-secondary"]:hover,
+        button[data-testid="baseButton-primary"]:hover {
             background: #00284d !important;
             background-color: #00284d !important;
             color: #ffffff !important;
             border-color: #001f3f !important;
         }
 
-        div.stDownloadButton > button *,
-        div.stButton > button * {
+        div.stButton > button:hover *,
+        div[data-testid="stButton"] > button:hover *,
+        div.stButton > button:hover p,
+        div[data-testid="stButton"] > button:hover p,
+        div.stButton > button:hover span,
+        div[data-testid="stButton"] > button:hover span {
             color: #ffffff !important;
-            font-weight: 800 !important;
+            fill: #ffffff !important;
+            opacity: 1 !important;
         }
 
         /* Tab Navigation Styling (Photo 3 Fix: Light Blue & Pitch-Black Text Theme) */

@@ -1,8 +1,10 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import plotly.express as px
+import urllib.parse
 
 def render_social_share_preview(df):
-    """Renders the Social Media Share Preview card expander component."""
+    """Renders the Social Media Share Preview card expander component with real dynamic links."""
     if df is None or df.empty or "population" not in df.columns:
         return
 
@@ -16,7 +18,21 @@ def render_social_share_preview(df):
     else:
         growth_rate = "+0.2"
 
-    with st.expander("🚀 Social Media Share Preview"):
+    # Base App URL for sharing
+    base_url = "https://asub-project-showcase.streamlit.app"
+    params = {
+        "metric": "population",
+        "pop": str(latest_pop),
+        "growth": growth_rate,
+        "year": str(latest_year)
+    }
+    encoded_params = urllib.parse.urlencode(params)
+    dynamic_share_url = f"{base_url}/?{encoded_params}"
+
+    # Auto expand if loaded via a share link
+    is_shared = any(k in st.query_params for k in ["metric", "pop", "share"])
+
+    with st.expander("🚀 Social Media Share Preview", expanded=is_shared):
         st.write("Preview how this data looks when shared on Twitter/LinkedIn:")
         
         # Create a mock social card container
@@ -44,6 +60,23 @@ def render_social_share_preview(df):
                 st.caption("asub.ax • Official Statistics")
                 st.write(f"New data shows a {growth_rate}% increase in {latest_year}. See the full breakdown...")
                 
+        # Action button to copy real dynamic link
         if st.button("🔗 Copy Link with Dynamic Preview"):
-            st.toast("🔗 Dynamic social share link copied to clipboard!", icon="📋")
-            st.success("Share link generated with OpenGraph meta preview tags!")
+            # Set Streamlit query params in URL
+            st.query_params["metric"] = "population"
+            st.query_params["pop"] = str(latest_pop)
+            st.query_params["year"] = str(latest_year)
+            
+            # JS Clipboard write
+            js_copy = f"""
+            <script>
+                if (navigator.clipboard) {{
+                    navigator.clipboard.writeText("{dynamic_share_url}");
+                }}
+            </script>
+            """
+            components.html(js_copy, height=0, width=0)
+            
+            st.toast("🔗 Dynamic share link copied to clipboard!", icon="📋")
+            st.success(f"**Share Link Ready:** [{dynamic_share_url}]({dynamic_share_url})")
+            st.code(dynamic_share_url, language="text")

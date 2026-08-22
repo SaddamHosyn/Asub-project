@@ -12,6 +12,9 @@ from views.tourism import render_tourism_tab
 from views.forecaster import render_forecaster_tab
 from views.data_explorer import render_data_explorer_tab
 from views.social_share import render_social_share_preview
+from views.smart_defaults import render_smart_defaults_bar
+from views.news_widget import render_news_widget_tab
+from views.scrollytelling import render_scrollytelling_tab
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -27,6 +30,25 @@ apply_custom_styles()
 # Load Cached Dataset
 df_macro, df_muni, df_sectors, df_tourism_monthly, df_age = load_asub_portal_data()
 
+# Headless Iframe Embed Mode for News Media
+if st.query_params.get("embed") == "1":
+    chart_code = st.query_params.get("chart", "macro")
+    if chart_code == "macro":
+        fig = px.line(df_macro, x="year", y="population", title="Åland Population Trajectory (2015-2026)")
+        fig.update_traces(line_color="#004077", line_width=4)
+    elif chart_code == "muni":
+        fig = px.bar(df_muni.sort_values("population", ascending=True), x="population", y="municipality", orientation="h", title="Inhabitants Across 16 Municipalities")
+        fig.update_traces(marker_color="#004077")
+    elif chart_code == "sectors":
+        fig = px.pie(df_sectors, values="employees", names="sector", title="Employment Distribution by Sector", hole=0.4)
+    else:
+        fig = px.bar(df_tourism_monthly, x="month", y="guest_nights", title="Monthly Tourist Guest Nights Peak")
+        fig.update_traces(marker_color="#004077")
+        
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: Ålands statistik- och utredningsbyrå (ÅSUB) Live PX-Web API")
+    st.stop()
+
 
 # --- SIDEBAR & GLOBAL CONTROLS ---
 with st.sidebar:
@@ -36,13 +58,18 @@ with st.sidebar:
     
     st.markdown("### 🗺️ Portal Controls")
     
-    # Year Range Filter
+    # Year Range Filter with Session State
     min_year, max_year = int(df_macro["year"].min()), int(df_macro["year"].max())
+    if "year_range_slider" not in st.session_state:
+        st.session_state["year_range_slider"] = (2017, max_year)
+    if "region_selectbox" not in st.session_state:
+        st.session_state["region_selectbox"] = "All Regions"
+
     selected_years = st.slider(
         "📅 Time Horizon Range", 
         min_value=min_year, 
         max_value=max_year, 
-        value=(2017, max_year)
+        key="year_range_slider"
     )
     
     # Filtered macro data based on sidebar selection
@@ -50,9 +77,9 @@ with st.sidebar:
     
     st.divider()
     
-    # Region Selection Filter
+    # Region Selection Filter with Session State
     region_options = ["All Regions"] + list(df_muni["region"].unique())
-    selected_region = st.selectbox("📍 Region Focus", region_options)
+    selected_region = st.selectbox("📍 Region Focus", region_options, key="region_selectbox")
     
     if selected_region != "All Regions":
         df_muni_filtered = df_muni[df_muni["region"] == selected_region]
@@ -127,13 +154,19 @@ with col5:
 st.markdown("<br>", unsafe_allow_html=True)
 
 
+# --- SMART DEFAULTS PERMALINKS BAR ---
+render_smart_defaults_bar(min_year, max_year, region_options)
+
+
 # --- TABS ROUTER ---
-tab_overview, tab_demo, tab_econ, tab_tourism, tab_forecast, tab_data = st.tabs([
+tab_overview, tab_demo, tab_econ, tab_tourism, tab_forecast, tab_story, tab_embed, tab_data = st.tabs([
     "📊 Executive Overview", 
     "👥 Demographics & Municipalities", 
     "💼 Economy & Labor Market", 
     "🚢 Tourism & Transport", 
     "🔮 Scenario Forecaster", 
+    "📖 'Åland in Figures' Story",
+    "📰 News Media Embeds",
     "📥 Data Explorer & Export"
 ])
 
@@ -151,6 +184,12 @@ with tab_tourism:
 
 with tab_forecast:
     render_forecaster_tab(df_macro, latest_year)
+
+with tab_story:
+    render_scrollytelling_tab(df_macro, df_muni, df_sectors)
+
+with tab_embed:
+    render_news_widget_tab(df_macro, df_muni, df_sectors, df_tourism_monthly)
 
 with tab_data:
     render_data_explorer_tab(df_macro, df_muni, df_sectors, show_raw_api, df_macro_filtered)

@@ -11,6 +11,7 @@ from views.economy import render_economy_tab
 from views.tourism import render_tourism_tab
 from views.forecaster import render_forecaster_tab
 from views.data_explorer import render_data_explorer_tab
+from views.social_share import render_social_share_preview
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -153,6 +154,10 @@ with tab_forecast:
 
 with tab_data:
     render_data_explorer_tab(df_macro, df_muni, df_sectors, show_raw_api, df_macro_filtered)
+
+
+# --- SOCIAL MEDIA SHARE PREVIEW ---
+render_social_share_preview(df_macro)
 
 
 # --- FOOTER ---

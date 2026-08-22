@@ -101,9 +101,3 @@ d:\Projects\Asub\
 * [NumPy](https://numpy.org/) - Numerical Data Processing
 
 ---
-
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-*Maintained for Åland Statistical Intelligence & Public Policy Analysis.*
